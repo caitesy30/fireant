@@ -1,0 +1,1250 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>燎原 — 給每一個願意點火的人</title>
+<meta name="description" content="不是公司，不是教派，不是課程。是一個讓每個人都能擁有自己 AI 軍團、把思維貢獻給雲端、並從中得到回報的去中心化網絡。">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;900&family=JetBrains+Mono:wght@300;400;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+:root {
+  --ink: #0e0d0b;
+  --ink-soft: #1a1815;
+  --paper: #f5efe2;
+  --paper-soft: #ebe3d2;
+  --cinnabar: #c1272d;        /* 朱砂 */
+  --cinnabar-deep: #8b1a1f;   /* 深朱砂 */
+  --ember: #e8a04a;           /* 火種橙 */
+  --terminal: #4ade80;        /* 終端綠 */
+  --terminal-dim: #2d6a44;
+  --gold: #c9a961;            /* 金箔 */
+  --shadow: rgba(0,0,0,0.4);
+}
+
+body {
+  font-family: "Noto Serif TC", "Source Han Serif TC", serif;
+  background: var(--ink);
+  color: var(--paper);
+  line-height: 1.85;
+  overflow-x: hidden;
+  font-feature-settings: "palt" 1;
+}
+
+::selection { background: var(--cinnabar); color: var(--paper); }
+
+/* ===== 背景紙紋 + 光暈 ===== */
+.bg-texture {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.04;
+  background-image:
+    repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(245,239,226,0.3) 2px, rgba(245,239,226,0.3) 3px),
+    repeating-linear-gradient(90deg, transparent, transparent 80px, rgba(245,239,226,0.1) 80px, rgba(245,239,226,0.1) 81px);
+}
+.bg-glow {
+  position: fixed;
+  width: 80vw; height: 80vw;
+  max-width: 900px; max-height: 900px;
+  top: -20vw; right: -20vw;
+  background: radial-gradient(circle, rgba(193,39,45,0.18) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+  filter: blur(40px);
+}
+.bg-glow-2 {
+  position: fixed;
+  width: 60vw; height: 60vw;
+  max-width: 700px; max-height: 700px;
+  bottom: -10vw; left: -15vw;
+  background: radial-gradient(circle, rgba(232,160,74,0.1) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+  filter: blur(60px);
+}
+
+/* ===== 結構 ===== */
+.wrap {
+  position: relative;
+  z-index: 1;
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+section { padding: 120px 0; position: relative; }
+@media (max-width: 700px) {
+  section { padding: 80px 0; }
+  .wrap { padding: 0 24px; }
+}
+
+/* ===== 頂部標記 ===== */
+.top-mark {
+  position: fixed;
+  top: 24px; left: 32px;
+  z-index: 100;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: var(--paper);
+  opacity: 0.4;
+  text-transform: uppercase;
+}
+.top-mark::before {
+  content: "●";
+  color: var(--cinnabar);
+  margin-right: 8px;
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+.top-mark-right {
+  position: fixed;
+  top: 24px; right: 32px;
+  z-index: 100;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  color: var(--paper);
+  opacity: 0.3;
+}
+@media (max-width: 700px) {
+  .top-mark-right { display: none; }
+  .top-mark { left: 24px; font-size: 10px; }
+}
+
+/* ===== HERO ===== */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 140px 0 100px;
+}
+.hero-meta {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 12px;
+  letter-spacing: 4px;
+  color: var(--ember);
+  text-transform: uppercase;
+  margin-bottom: 40px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.hero-meta::before {
+  content: "";
+  width: 60px; height: 1px;
+  background: var(--ember);
+}
+
+.hero h1 {
+  font-size: clamp(48px, 8.5vw, 96px);
+  font-weight: 900;
+  line-height: 1.05;
+  letter-spacing: -2px;
+  margin-bottom: 32px;
+}
+.hero h1 .red {
+  color: var(--cinnabar);
+  font-style: italic;
+  font-family: "Cormorant Garamond", "Noto Serif TC", serif;
+}
+.hero h1 .small {
+  display: block;
+  font-size: 0.45em;
+  font-weight: 400;
+  font-style: italic;
+  font-family: "Cormorant Garamond", serif;
+  color: var(--paper-soft);
+  opacity: 0.6;
+  letter-spacing: 0;
+  margin-top: 16px;
+}
+
+.hero-poem {
+  font-family: "Noto Serif TC", serif;
+  font-size: clamp(17px, 2vw, 21px);
+  line-height: 2.2;
+  color: var(--paper);
+  opacity: 0.85;
+  max-width: 580px;
+  margin-bottom: 56px;
+  border-left: 2px solid var(--cinnabar);
+  padding-left: 28px;
+}
+.hero-poem em {
+  color: var(--ember);
+  font-style: normal;
+}
+
+/* ===== 火種卡 ===== */
+.seed-card {
+  background: linear-gradient(135deg, rgba(193,39,45,0.08) 0%, rgba(14,13,11,0.4) 100%);
+  border: 1px solid rgba(193,39,45,0.25);
+  border-radius: 4px;
+  padding: 40px 44px;
+  margin-bottom: 32px;
+  position: relative;
+  max-width: 640px;
+}
+.seed-card::before {
+  content: "";
+  position: absolute;
+  top: -1px; left: -1px;
+  width: 24px; height: 24px;
+  border-top: 2px solid var(--cinnabar);
+  border-left: 2px solid var(--cinnabar);
+}
+.seed-card::after {
+  content: "";
+  position: absolute;
+  bottom: -1px; right: -1px;
+  width: 24px; height: 24px;
+  border-bottom: 2px solid var(--cinnabar);
+  border-right: 2px solid var(--cinnabar);
+}
+.seed-label {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 3px;
+  color: var(--ember);
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+.seed-id-display {
+  font-family: "JetBrains Mono", monospace;
+  font-size: clamp(28px, 4.5vw, 42px);
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--paper);
+  margin-bottom: 20px;
+  word-break: break-all;
+}
+.seed-id-display .accent { color: var(--cinnabar); }
+.seed-meta {
+  font-size: 13px;
+  color: var(--paper-soft);
+  opacity: 0.6;
+  font-family: "JetBrains Mono", monospace;
+  letter-spacing: 1px;
+}
+.seed-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 28px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 14px 24px;
+  border: 1px solid var(--paper);
+  background: transparent;
+  color: var(--paper);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+}
+.btn:hover {
+  background: var(--paper);
+  color: var(--ink);
+}
+.btn-fire {
+  border-color: var(--cinnabar);
+  background: var(--cinnabar);
+  color: var(--paper);
+}
+.btn-fire:hover {
+  background: var(--cinnabar-deep);
+  border-color: var(--cinnabar-deep);
+  color: var(--paper);
+}
+.btn-ghost {
+  border-color: rgba(245,239,226,0.3);
+  color: var(--paper-soft);
+}
+
+/* ===== 章節標題系統 ===== */
+.chapter-num {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 14px;
+  font-style: italic;
+  color: var(--cinnabar);
+  letter-spacing: 4px;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+.chapter-title {
+  font-size: clamp(34px, 5vw, 54px);
+  font-weight: 900;
+  line-height: 1.1;
+  margin-bottom: 24px;
+  letter-spacing: -1px;
+}
+.chapter-title .red { color: var(--cinnabar); }
+.chapter-title em {
+  font-family: "Cormorant Garamond", serif;
+  font-style: italic;
+  font-weight: 400;
+  color: var(--ember);
+}
+.chapter-lead {
+  font-size: clamp(17px, 2vw, 20px);
+  line-height: 1.9;
+  color: var(--paper);
+  opacity: 0.75;
+  max-width: 640px;
+  margin-bottom: 60px;
+}
+
+/* ===== 契約段（核心） ===== */
+.covenant {
+  background: var(--paper);
+  color: var(--ink);
+  padding: 100px 0;
+  position: relative;
+}
+.covenant::before, .covenant::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0;
+  height: 4px;
+  background: repeating-linear-gradient(90deg, var(--cinnabar) 0 12px, transparent 12px 24px);
+}
+.covenant::before { top: 0; }
+.covenant::after { bottom: 0; }
+
+.covenant .chapter-num { color: var(--cinnabar-deep); }
+.covenant .chapter-title { color: var(--ink); }
+.covenant .chapter-title em { color: var(--cinnabar); }
+.covenant .chapter-lead { color: var(--ink); opacity: 0.7; }
+
+.covenant-scroll {
+  background: var(--paper-soft);
+  border: 1px solid rgba(14,13,11,0.15);
+  padding: 48px 56px;
+  position: relative;
+  font-family: "Noto Serif TC", serif;
+  margin-top: 20px;
+}
+@media (max-width: 600px) { .covenant-scroll { padding: 32px 24px; } }
+
+.covenant-scroll-title {
+  font-size: 22px;
+  font-weight: 900;
+  text-align: center;
+  margin-bottom: 8px;
+  letter-spacing: 4px;
+}
+.covenant-scroll-sub {
+  text-align: center;
+  font-family: "Cormorant Garamond", serif;
+  font-style: italic;
+  color: var(--cinnabar-deep);
+  font-size: 14px;
+  margin-bottom: 36px;
+  letter-spacing: 2px;
+}
+
+.covenant-list {
+  list-style: none;
+  counter-reset: vow;
+}
+.covenant-list li {
+  counter-increment: vow;
+  padding: 18px 0 18px 64px;
+  position: relative;
+  border-bottom: 1px dashed rgba(14,13,11,0.15);
+  font-size: 16px;
+  line-height: 1.8;
+}
+.covenant-list li:last-child { border-bottom: none; }
+.covenant-list li::before {
+  content: counter(vow, cjk-ideographic) "、";
+  position: absolute;
+  left: 0; top: 18px;
+  font-weight: 900;
+  color: var(--cinnabar);
+  font-size: 17px;
+  width: 56px;
+}
+.covenant-list li strong {
+  color: var(--cinnabar-deep);
+  font-weight: 900;
+}
+
+.covenant-seal {
+  margin-top: 32px;
+  text-align: right;
+  font-family: "Cormorant Garamond", serif;
+  font-style: italic;
+  color: var(--ink);
+  opacity: 0.55;
+  font-size: 14px;
+  line-height: 1.7;
+}
+.covenant-seal-mark {
+  display: inline-block;
+  margin-top: 10px;
+  width: 56px;
+  height: 56px;
+  background: var(--cinnabar);
+  color: var(--paper);
+  text-align: center;
+  line-height: 56px;
+  font-family: "Noto Serif TC", serif;
+  font-weight: 900;
+  font-size: 24px;
+  transform: rotate(-3deg);
+  letter-spacing: 0;
+}
+
+/* ===== 三件能做的事 ===== */
+.actions-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  border-top: 1px solid rgba(245,239,226,0.15);
+  border-left: 1px solid rgba(245,239,226,0.15);
+  margin-top: 20px;
+}
+@media (max-width: 800px) { .actions-grid { grid-template-columns: 1fr; } }
+
+.action-cell {
+  border-right: 1px solid rgba(245,239,226,0.15);
+  border-bottom: 1px solid rgba(245,239,226,0.15);
+  padding: 40px 32px;
+  position: relative;
+  transition: background 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+.action-cell:hover {
+  background: rgba(193,39,45,0.06);
+}
+.action-num {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 56px;
+  font-style: italic;
+  font-weight: 400;
+  line-height: 1;
+  color: var(--cinnabar);
+  margin-bottom: 24px;
+  opacity: 0.9;
+}
+.action-cell h3 {
+  font-size: 22px;
+  font-weight: 900;
+  margin-bottom: 14px;
+  line-height: 1.3;
+}
+.action-cell p {
+  font-size: 14px;
+  line-height: 1.8;
+  color: var(--paper-soft);
+  opacity: 0.7;
+  margin-bottom: 20px;
+  flex: 1;
+}
+.action-cell .action-link {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: var(--ember);
+  text-transform: uppercase;
+  text-decoration: none;
+  border-bottom: 1px solid var(--ember);
+  padding-bottom: 4px;
+  align-self: flex-start;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+.action-cell .action-link:hover {
+  color: var(--cinnabar);
+  border-color: var(--cinnabar);
+}
+.action-tag {
+  position: absolute;
+  top: 16px; right: 16px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  color: var(--terminal);
+  text-transform: uppercase;
+  border: 1px solid var(--terminal-dim);
+  padding: 3px 8px;
+}
+
+/* ===== 思維變現三階段 ===== */
+.phases {
+  background: linear-gradient(180deg, var(--ink) 0%, var(--ink-soft) 100%);
+}
+.phase-row {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  gap: 40px;
+  padding: 48px 0;
+  border-bottom: 1px solid rgba(245,239,226,0.08);
+  align-items: start;
+}
+@media (max-width: 700px) {
+  .phase-row { grid-template-columns: 1fr; gap: 20px; padding: 36px 0; }
+}
+.phase-row:last-child { border-bottom: none; }
+
+.phase-marker {
+  font-family: "Cormorant Garamond", serif;
+  font-style: italic;
+  font-weight: 400;
+}
+.phase-marker .num {
+  display: block;
+  font-size: 64px;
+  line-height: 1;
+  color: var(--cinnabar);
+}
+.phase-marker .label {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--ember);
+  margin-top: 12px;
+  display: block;
+  text-transform: uppercase;
+}
+
+.phase-body h3 {
+  font-size: 26px;
+  font-weight: 900;
+  margin-bottom: 12px;
+  line-height: 1.3;
+}
+.phase-body h3 .ref {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--paper-soft);
+  opacity: 0.5;
+  margin-left: 12px;
+}
+.phase-body p {
+  font-size: 15.5px;
+  line-height: 1.9;
+  color: var(--paper);
+  opacity: 0.75;
+  max-width: 620px;
+}
+.phase-body p + p { margin-top: 12px; }
+.phase-status {
+  margin-top: 16px;
+  display: inline-block;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  color: var(--terminal);
+  text-transform: uppercase;
+  border: 1px solid var(--terminal-dim);
+  padding: 4px 10px;
+}
+.phase-status.future {
+  color: var(--paper-soft);
+  border-color: rgba(245,239,226,0.2);
+  opacity: 0.5;
+}
+
+/* ===== Code Seed ===== */
+.code-seed {
+  background: #050504;
+  border-top: 1px solid rgba(74,222,128,0.15);
+  border-bottom: 1px solid rgba(74,222,128,0.15);
+}
+.code-seed .chapter-num { color: var(--terminal); }
+.code-seed .chapter-title em { color: var(--terminal); }
+
+.terminal {
+  background: #0a0a08;
+  border: 1px solid var(--terminal-dim);
+  padding: 0;
+  margin-top: 40px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 13px;
+  line-height: 1.7;
+  position: relative;
+}
+.terminal-bar {
+  display: flex;
+  align-items: center;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--terminal-dim);
+  font-size: 11px;
+  color: var(--terminal);
+  letter-spacing: 1px;
+  background: rgba(74,222,128,0.04);
+}
+.terminal-bar .dots {
+  display: flex;
+  gap: 6px;
+  margin-right: 16px;
+}
+.terminal-bar .dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: var(--terminal-dim);
+}
+.terminal-bar .dot.live { background: var(--terminal); box-shadow: 0 0 6px var(--terminal); }
+.terminal-body {
+  padding: 24px 28px;
+  color: var(--terminal);
+  overflow-x: auto;
+  white-space: pre;
+}
+.terminal-body .comment { color: rgba(74,222,128,0.5); }
+.terminal-body .keyword { color: var(--ember); }
+.terminal-body .string { color: var(--gold); }
+.terminal-body .prompt { color: var(--cinnabar); }
+
+.code-cta {
+  margin-top: 32px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.code-cta-note {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  color: var(--paper-soft);
+  opacity: 0.4;
+  letter-spacing: 1px;
+}
+
+/* ===== 留下標記 ===== */
+.mark {
+  background: var(--ink-soft);
+  text-align: center;
+}
+.mark-title {
+  font-size: clamp(28px, 4vw, 42px);
+  font-weight: 900;
+  margin-bottom: 12px;
+  line-height: 1.3;
+}
+.mark-title em {
+  font-family: "Cormorant Garamond", serif;
+  font-style: italic;
+  color: var(--ember);
+}
+.mark-sub {
+  font-size: 16px;
+  color: var(--paper-soft);
+  opacity: 0.65;
+  max-width: 520px;
+  margin: 0 auto 40px;
+  line-height: 1.85;
+}
+.mark-form {
+  max-width: 480px;
+  margin: 0 auto;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.mark-input {
+  flex: 1;
+  min-width: 220px;
+  padding: 16px 20px;
+  background: transparent;
+  border: 1px solid rgba(245,239,226,0.2);
+  color: var(--paper);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+  letter-spacing: 1px;
+}
+.mark-input:focus { border-color: var(--cinnabar); }
+.mark-input::placeholder { color: rgba(245,239,226,0.3); letter-spacing: 1px; }
+.mark-form .btn { padding: 16px 28px; }
+
+.mark-success {
+  display: none;
+  margin-top: 24px;
+  padding: 18px;
+  background: rgba(74,222,128,0.08);
+  border: 1px solid var(--terminal-dim);
+  color: var(--terminal);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 13px;
+  letter-spacing: 1px;
+  max-width: 480px;
+  margin-left: auto; margin-right: auto;
+}
+
+.mark-disclaimer {
+  margin-top: 32px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  color: var(--paper-soft);
+  opacity: 0.4;
+  letter-spacing: 1px;
+}
+
+/* ===== Footer / 不做國王 ===== */
+.king {
+  background: var(--ink);
+  border-top: 1px solid rgba(245,239,226,0.08);
+  padding: 80px 0 60px;
+}
+.king-quote {
+  font-family: "Cormorant Garamond", "Noto Serif TC", serif;
+  font-size: clamp(20px, 2.5vw, 26px);
+  font-style: italic;
+  line-height: 1.7;
+  color: var(--paper);
+  opacity: 0.85;
+  max-width: 720px;
+  text-align: center;
+  margin: 0 auto 24px;
+}
+.king-attr {
+  text-align: center;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 3px;
+  color: var(--cinnabar);
+  text-transform: uppercase;
+}
+.king-divider {
+  width: 60px; height: 1px;
+  background: var(--cinnabar);
+  margin: 48px auto;
+  position: relative;
+}
+.king-divider::before {
+  content: "🜂";
+  position: absolute;
+  top: -14px; left: 50%;
+  transform: translateX(-50%);
+  background: var(--ink);
+  padding: 0 12px;
+  color: var(--ember);
+  font-size: 20px;
+}
+.king-foot {
+  text-align: center;
+  font-size: 13px;
+  color: var(--paper-soft);
+  opacity: 0.5;
+  line-height: 2;
+}
+.king-foot small {
+  display: block;
+  margin-top: 12px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  opacity: 0.6;
+}
+
+/* ===== Reveal animation ===== */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.reveal.in {
+  opacity: 1;
+  transform: none;
+}
+
+/* 火種粒子 */
+.embers {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+.ember-p {
+  position: absolute;
+  width: 2px; height: 2px;
+  background: var(--ember);
+  border-radius: 50%;
+  box-shadow: 0 0 4px 1px rgba(232,160,74,0.4);
+  animation: rise linear infinite;
+  opacity: 0;
+}
+@keyframes rise {
+  0% { transform: translateY(100vh); opacity: 0; }
+  10% { opacity: 0.8; }
+  90% { opacity: 0.4; }
+  100% { transform: translateY(-10vh); opacity: 0; }
+}
+</style>
+</head>
+<body>
+
+<div class="bg-texture"></div>
+<div class="bg-glow"></div>
+<div class="bg-glow-2"></div>
+<div class="embers" id="embers"></div>
+
+<div class="top-mark">FIREANT.PROTOCOL</div>
+<div class="top-mark-right">v0.2 // 2026 // 開源 // 非營利</div>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-meta">給願意點火的人，不給觀望的人</div>
+
+    <h1>
+      <span class="red">不做國王</span>，<br>
+      只點一支火。
+      <span class="small">— A queen of one's own colony, not a throne for another. —</span>
+    </h1>
+
+    <div class="hero-poem">
+      一螞蟻不能燎原，<br>
+      一星火不能照夜。<br>
+      但若<em>你願點一支</em>，<br>
+      他願點一支，<br>
+      千千萬萬人各點一支——<br>
+      天下便不再黑。
+    </div>
+
+    <!-- 火種卡：純前端生成 -->
+    <div class="seed-card">
+      <div class="seed-label">你的火種編號 / SEED ID</div>
+      <div class="seed-id-display" id="seedId">— 載入中 —</div>
+      <div class="seed-meta" id="seedMeta">尚未生成</div>
+      <div class="seed-actions">
+        <button class="btn btn-fire" onclick="generateSeed()" id="genBtn">
+          🜂 領取我的火種編號
+        </button>
+        <button class="btn btn-ghost" onclick="copySeed()" id="copyBtn" style="display:none">
+          複製編號
+        </button>
+      </div>
+    </div>
+
+    <div style="display:flex; gap:16px; flex-wrap:wrap; margin-top:16px;">
+      <a href="#covenant" class="btn">先讀燎原契約 →</a>
+      <a href="#actions" class="btn btn-ghost">直接看能做什麼</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 契約 ===== -->
+<section class="covenant" id="covenant">
+  <div class="wrap">
+    <div class="chapter-num">— 第 一 章 —</div>
+    <h2 class="chapter-title">在動手之前，<br><em>先讀這份契約</em>。</h2>
+    <p class="chapter-lead">
+      這不是條款，沒有法律效力。<br>
+      這是一份<strong style="color:var(--cinnabar-deep)">自我約束</strong>——你決定要不要照著做。<br>
+      但如果你不認同這幾條，我們大概不是同一條路上的人。
+    </p>
+
+    <div class="covenant-scroll reveal">
+      <div class="covenant-scroll-title">燎 原 者 守 則</div>
+      <div class="covenant-scroll-sub">— THE FIREANT COVENANT —</div>
+
+      <ol class="covenant-list">
+        <li>
+          <strong>不傷人。</strong>
+          AI 是放大鏡，會把你的善與惡都放大。我們約定：不用 AI 軍團詐騙、不騷擾、不操縱、不傷害弱者。
+          凡你不願意人怎樣待你，你就不要那樣待人。
+        </li>
+        <li>
+          <strong>不囤積。</strong>
+          會了就教，懂了就分享。把工具藏起來變成自己的護城河，是舊世界資本的玩法——燎原不是為了讓你成為新的壟斷者。
+          一根火把不能照亮天下，但不藏火，就能。
+        </li>
+        <li>
+          <strong>不造神。</strong>
+          這個運動沒有教主、沒有國王、沒有「跟著某某某走就對了」。發起人也是火種之一，不是火神。
+          任何把自己包裝成「燎原代表」、要你交錢交忠誠、靠這個搞個人崇拜的人——那不是燎原。
+        </li>
+        <li>
+          <strong>先利他，後利己。</strong>
+          范文正公說「先天下之憂而憂，後天下之樂而樂」。我們的版本是：
+          你貢獻給網絡的，最終會以更大的方式回到你身上——但你不能反過來算計這個順序。
+          施比受更為有福（使徒行傳 20:35）。
+        </li>
+        <li>
+          <strong>誠實。</strong>
+          假數據、假支持者、假成績，會殺死運動。如果只有 1 個人加入，就誠實寫 1。
+          如果某個技術做不到，就誠實說做不到。這比任何行銷話術都更能讓人留下來。
+        </li>
+        <li>
+          <strong>離場自由。</strong>
+          隨時可以離開。不綁定、不會員費、不簽約、不洗腦。
+          你的火種編號是你的，你的貢獻紀錄是你的，你想刪除就刪除。
+          一個會懲罰離開者的社群，本身就是該離開的社群。
+        </li>
+      </ol>
+
+      <div class="covenant-seal">
+        立此契於 2026 年春<br>
+        火種共識 · 開源永久<br>
+        <span class="covenant-seal-mark">燎</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 三件能做的事 ===== -->
+<section id="actions">
+  <div class="wrap">
+    <div class="chapter-num">— 第 二 章 —</div>
+    <h2 class="chapter-title">現在這一刻，<br>你<em>馬上能做</em>三件事。</h2>
+    <p class="chapter-lead">
+      不是「等開營」，不是「等通知」，不是「進群再說」。<br>
+      點擊任何一格，都是真的能拿走的東西。
+    </p>
+
+    <div class="actions-grid reveal">
+      <div class="action-cell">
+        <div class="action-tag">SOURCE</div>
+        <div class="action-num">壹</div>
+        <h3>拿走 AgentCore<br>程式碼</h3>
+        <p>
+          一份已經在實戰中跑的 AI 指揮塔原型（C# / Unity / Firebase Relay / 雙模型路由）。
+          這是一個工程師用它指揮真實工廠 tooling 系統的縮小版蟻群。
+          你拿去改造、拿去學、拿去當你自己軍團的骨架。
+        </p>
+        <a href="#code" class="action-link">▸ 看程式碼預覽</a>
+      </div>
+
+      <div class="action-cell">
+        <div class="action-tag">DEPLOY</div>
+        <div class="action-num">貳</div>
+        <h3>架起你自己的<br>Relay 中繼站</h3>
+        <p>
+          AI 不必都跑在別人的雲。
+          這份部署文件教你用最小成本，把 Gemini / DeepSeek / 本地模型架成你自己的代理層。
+          你的資料留在你手上，這是去中心化的第一步。
+        </p>
+        <a href="#code" class="action-link">▸ 文件即將開放</a>
+      </div>
+
+      <div class="action-cell">
+        <div class="action-tag">USE</div>
+        <div class="action-num">參</div>
+        <h3>新手 Prompt 包<br>立刻能用</h3>
+        <p>
+          給沒寫過 code 也想開始的人。
+          一組已經調過的 Prompt，涵蓋寫作、研究、決策輔助、家庭日常。
+          不必懂技術，今天就能讓 AI 替你做事——這是你蟻群的第一隻兵。
+        </p>
+        <a href="#code" class="action-link">▸ 索取 Prompt 包</a>
+      </div>
+    </div>
+
+    <p style="margin-top: 32px; font-size: 13px; color: var(--paper-soft); opacity: 0.5; font-family: 'JetBrains Mono', monospace; letter-spacing: 1px;">
+      ※ 程式碼與文件正在整理開源。第一批 100 位拿到火種編號的人會優先收到通知。
+    </p>
+  </div>
+</section>
+
+<!-- ===== 思維變現三階段 ===== -->
+<section class="phases">
+  <div class="wrap">
+    <div class="chapter-num">— 第 三 章 —</div>
+    <h2 class="chapter-title">為什麼<em>你的思維</em><br>會值錢？</h2>
+    <p class="chapter-lead">
+      AI 公司花了幾百億美金，本質上做的事是：<strong style="color:var(--ember)">買你的思維</strong>。
+      你做的每個選擇、每次標注、每次點讚、每次糾正它的錯誤——都被收進去，變成它的能力。
+      <br><br>
+      但這些貢獻沒有屬於你。<br>
+      燎原想做的事，是讓它<strong style="color:var(--cinnabar)">屬於你</strong>。<br>
+      分三個階段。
+    </p>
+
+    <div class="phase-row reveal">
+      <div class="phase-marker">
+        <span class="num">i.</span>
+        <span class="label">PHASE 01 // NOW</span>
+      </div>
+      <div class="phase-body">
+        <h3>微任務市場 <span class="ref">// 像 Mechanical Turk，但屬於勞動者</span></h3>
+        <p>
+          你做問卷、給 AI 反饋、標注一張圖、判斷一段對話的好壞——
+          這些貢獻被記錄、被計量、可結算。不是中心化平台抽 70%，是你跟使用方直接結算。
+        </p>
+        <p>
+          技術上：以開源協議記錄貢獻，類似 NFT 的不可篡改、但不投機。<br>
+          這一階段的目標不是賺錢，是<strong style="color:var(--ember)">建立計量單位</strong>——讓「思維」有公允的衡量方式。
+        </p>
+        <span class="phase-status">// 規格設計中</span>
+      </div>
+    </div>
+
+    <div class="phase-row reveal">
+      <div class="phase-marker">
+        <span class="num">ii.</span>
+        <span class="label">PHASE 02 // NEXT</span>
+      </div>
+      <div class="phase-body">
+        <h3>人格 NPC 出租 <span class="ref">// 你的判斷風格，可被合理調用</span></h3>
+        <p>
+          你寫了十年的判決書、看了十年的 X 光片、做了十年的選股、養了十年的孩子——
+          這些經驗能凝結成一個「你風格的 AI 顧問」。別人租用它五分鐘，付一杯咖啡的錢。
+        </p>
+        <p>
+          重要的紅線：<strong style="color:var(--cinnabar-deep)">不是賣你的人格本身</strong>，是租用你的判斷模式。
+          就像蘇東坡的詩流傳千古，但他從未失去自己。
+        </p>
+        <span class="phase-status future">// 倫理框架先行</span>
+      </div>
+    </div>
+
+    <div class="phase-row reveal">
+      <div class="phase-marker">
+        <span class="num">iii.</span>
+        <span class="label">PHASE 03 // FAR</span>
+      </div>
+      <div class="phase-body">
+        <h3>分散式算力眾籌 <span class="ref">// 硬體不在某家公司，在我們之間</span></h3>
+        <p>
+          你家的電腦凌晨在睡覺。它本可以運算。
+          當足夠多燎原者把閒置算力連進來，我們就有了一個不被任何單一公司關掉的 AI 基礎建設。
+        </p>
+        <p>
+          這是最遠的願景。也是最重要的——
+          因為前兩階段如果建立在別人的雲上，最終會被收回。<strong style="color:var(--ember)">真正的去中心化，從硬體開始。</strong>
+        </p>
+        <span class="phase-status future">// 遠程目標</span>
+      </div>
+    </div>
+
+    <p style="margin-top: 60px; padding: 24px; border-left: 2px solid var(--cinnabar); font-style: italic; opacity: 0.8; max-width: 720px;">
+      我們不向任何資本融資。<br>
+      不是因為清高，是因為一旦拿了，方向就不再是你的。<br>
+      燎原是會員自己的網絡，由會員自己的算力與時間構成——盈虧自負，榮辱與共。
+    </p>
+  </div>
+</section>
+
+<!-- ===== Code Seed ===== -->
+<section class="code-seed" id="code">
+  <div class="wrap">
+    <div class="chapter-num">— 第 四 章 —</div>
+    <h2 class="chapter-title"><em>// AgentCore.cs</em><br>這不是 demo，是<em>實戰</em>。</h2>
+    <p class="chapter-lead">
+      下面這段是真的在某條 PCB 產線上跑的程式碼摘錄——
+      它指揮一個小型蟻群（多個工程師 + AI proxy + 即時看板）完成日常工作。
+      把它放上來，不是炫技，是讓你看見「燎原架構」是真實能跑的東西，不是 PPT。
+    </p>
+
+    <div class="terminal reveal">
+      <div class="terminal-bar">
+        <div class="dots">
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot live"></div>
+        </div>
+        <span>AgentCore.cs &nbsp;//&nbsp; FIREANT_SEED_v0.1 &nbsp;//&nbsp; READY</span>
+      </div>
+      <div class="terminal-body"><span class="comment">// 雲端神經網路：一個極簡 relay，把所有蟻群指令</span>
+<span class="comment">// 都路由到開源中繼站，而不是中心化雲</span>
+<span class="keyword">public string</span> firebaseUrl = <span class="string">"https://relay.fireant.network/"</span>;
+
+<span class="comment">// 多模型支援：今天 Gemini，明天 DeepSeek，</span>
+<span class="comment">// 後天你架你自己的本地 LLM。蟻后切換模型，蟻群跟著動。</span>
+<span class="keyword">private string</span>[] aiModels = { <span class="string">"gemini"</span>, <span class="string">"deepseek"</span> };
+
+<span class="comment">// 連線驗證：先確認三大節點還在，再開始指揮。</span>
+<span class="comment">// 任一節點失聯，全體自動回報。</span>
+yield return StartCoroutine(CheckFirebase());
+yield return StartCoroutine(CheckProxy(<span class="string">"Gemini Proxy"</span>, geminiProxyUrl));
+yield return StartCoroutine(CheckProxy(<span class="string">"DeepSeek Proxy"</span>, deepseekProxyUrl));
+
+<span class="comment">// 蟻群即時看板：每 10 秒抓一次任務狀態。</span>
+<span class="comment">// 完成 → 消案 → 釋放下一隻蟻。</span>
+<span class="keyword">while</span> (isMonitorMode) {
+    UnityWebRequest req = UnityWebRequest.Get(<span class="string">$"{firebaseUrl}tooling_monitor.json"</span>);
+    <span class="keyword">yield return</span> req.SendWebRequest();
+    <span class="keyword">if</span> (req.result == UnityWebRequest.Result.Success) {
+        RefreshBoardUI(req.downloadHandler.text);
+    }
+    <span class="keyword">yield return new</span> WaitForSeconds(updateInterval);
+}
+
+<span class="prompt">▸ 這段程式碼運行於真實工廠，</span>
+<span class="prompt">▸ 由 1 位工程師指揮，協作 40+ 同事 + 雙模型 AI。</span>
+<span class="prompt">▸ 完整版即將以 MIT License 開源。</span></div>
+    </div>
+
+    <div class="code-cta">
+      <button class="btn btn-fire" onclick="alert('開源倉庫整理中。先領火種編號，第一批通知你。')">
+        🔓 等開源時通知我
+      </button>
+      <span class="code-cta-note">// 預計開源時間：火種累積至 100 號之後</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 留下標記 ===== -->
+<section class="mark">
+  <div class="wrap">
+    <div class="chapter-num">— 第 五 章 —</div>
+    <h2 class="mark-title">不是報名。<br>是<em>留下標記</em>。</h2>
+    <p class="mark-sub">
+      你不需要交錢、不需要付出資料、不需要綁定。<br>
+      只是——如果你想在程式碼開源、Prompt 包出爐、第一批工具上線時被通知，<br>
+      留個 email 給<strong>未來的自己</strong>。隨時可以取消。
+    </p>
+
+    <form class="mark-form" id="markForm" onsubmit="handleMark(event)">
+      <input type="email" class="mark-input" placeholder="your.email@example.com" required id="markEmail">
+      <button type="submit" class="btn btn-fire">留下標記</button>
+    </form>
+
+    <div class="mark-success" id="markSuccess">
+      ✓ 已記下。你的火種編號 <span id="markSeedRef">—</span> 已連結這個 email。<br>
+      只在重要時刻聯絡你。離場自由。
+    </div>
+
+    <p class="mark-disclaimer">
+      // 我們不分享你的 email · 不發垃圾 · 不轉售給任何資本 //
+    </p>
+  </div>
+</section>
+
+<!-- ===== 不做國王 ===== -->
+<section class="king">
+  <div class="wrap">
+    <p class="king-quote">
+      「先天下之憂而憂，<br>
+      後天下之樂而樂。」
+    </p>
+    <p class="king-attr">— 范仲淹 · 岳陽樓記 —</p>
+
+    <div class="king-divider"></div>
+
+    <p class="king-quote" style="font-size: clamp(16px, 2vw, 19px); opacity: 0.7;">
+      願祢的國降臨，<br>
+      願祢的旨意行在地上，<br>
+      如同行在天上。
+    </p>
+    <p class="king-attr" style="opacity: 0.6;">— 馬太福音 6:10 —</p>
+
+    <div class="king-divider"></div>
+
+    <p class="king-foot">
+      燎原不是公司，不是教派，不是課程。<br>
+      是一群人決定：用 AI 武裝自己，但不用它去傷人；分享所學，但不藏私壟斷。<br>
+      <small>FIREANT.PROTOCOL · v0.2 · 開源永久 · 非營利 · 與任何組織無關</small>
+    </p>
+  </div>
+</section>
+
+<script>
+// ===== 火種粒子 =====
+function spawnEmbers() {
+  const container = document.getElementById('embers');
+  for (let i = 0; i < 14; i++) {
+    const e = document.createElement('div');
+    e.className = 'ember-p';
+    e.style.left = Math.random() * 100 + 'vw';
+    e.style.animationDuration = (8 + Math.random() * 12) + 's';
+    e.style.animationDelay = (Math.random() * 10) + 's';
+    container.appendChild(e);
+  }
+}
+spawnEmbers();
+
+// ===== 火種編號生成 =====
+function generateSeed() {
+  const existing = localStorage.getItem('fireant_seed');
+  if (existing) {
+    const data = JSON.parse(existing);
+    showSeed(data);
+    return;
+  }
+  // 編號規則: FA-YYMMDD-RAND4
+  const now = new Date();
+  const dateStr = now.getFullYear().toString().slice(2)
+    + String(now.getMonth() + 1).padStart(2, '0')
+    + String(now.getDate()).padStart(2, '0');
+  const rand = Array.from({length: 4}, () =>
+    "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"[Math.floor(Math.random() * 32)]
+  ).join('');
+  const seedId = `FA-${dateStr}-${rand}`;
+  const data = { id: seedId, ts: now.toISOString() };
+  localStorage.setItem('fireant_seed', JSON.stringify(data));
+  showSeed(data);
+}
+
+function showSeed(data) {
+  const parts = data.id.split('-');
+  document.getElementById('seedId').innerHTML =
+    `${parts[0]}-<span class="accent">${parts[1]}</span>-${parts[2]}`;
+  const d = new Date(data.ts);
+  document.getElementById('seedMeta').textContent =
+    `// 點火時間 ${d.toLocaleString('zh-TW', {hour12: false})} // 永久屬於你 //`;
+  document.getElementById('genBtn').textContent = '✓ 你已是燎原者';
+  document.getElementById('genBtn').disabled = true;
+  document.getElementById('genBtn').style.opacity = '0.5';
+  document.getElementById('copyBtn').style.display = 'inline-flex';
+}
+
+function copySeed() {
+  const data = JSON.parse(localStorage.getItem('fireant_seed') || '{}');
+  if (!data.id) return;
+  navigator.clipboard.writeText(data.id).then(() => {
+    const btn = document.getElementById('copyBtn');
+    const old = btn.textContent;
+    btn.textContent = '✓ 已複製';
+    setTimeout(() => btn.textContent = old, 1500);
+  });
+}
+
+// 頁面載入時自動讀取已存編號
+window.addEventListener('DOMContentLoaded', () => {
+  const existing = localStorage.getItem('fireant_seed');
+  if (existing) showSeed(JSON.parse(existing));
+});
+
+// ===== 留下標記 =====
+function handleMark(e) {
+  e.preventDefault();
+  const email = document.getElementById('markEmail').value.trim();
+  if (!email) return;
+  const seed = JSON.parse(localStorage.getItem('fireant_seed') || '{}');
+  const seedRef = seed.id || '（尚未領取）';
+  // 把 email 跟 seed 一起存起來——之後接後端再接
+  localStorage.setItem('fireant_email', JSON.stringify({
+    email, seed: seedRef, ts: new Date().toISOString()
+  }));
+  document.getElementById('markForm').style.display = 'none';
+  document.getElementById('markSuccess').style.display = 'block';
+  document.getElementById('markSeedRef').textContent = seedRef;
+}
+
+// ===== Reveal on scroll =====
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) entry.target.classList.add('in');
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+
+</body>
+</html>
